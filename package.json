@@ -1,0 +1,25 @@
+{
+  "name": "oneql-init",
+  "version": "1.0.0",
+  "description": "Init oneQL app",
+  "main": "src/command.js",
+  "bin": {
+    "oneql-init": "bin/oneql-init.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oneqljs/oneQL-init.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/oneqljs/oneQL-init/issues"
+  },
+  "homepage": "https://github.com/oneqljs/oneQL-init#readme",
+  "dependencies": {
+    "mkdirp": "^0.5.1"
+  }
+}
