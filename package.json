@@ -20,6 +20,12 @@
   },
   "homepage": "https://github.com/oneqljs/oneQL-init#readme",
   "dependencies": {
-    "mkdirp": "^0.5.1"
+    "compressing": "^1.4.0",
+    "mkdirp": "^0.5.1",
+    "mz-modules": "^2.1.0",
+    "node-copydir": "^1.0.1",
+    "node-homedir": "^1.1.1",
+    "urllib": "^2.33.2",
+    "yargs": "^13.2.2"
   }
 }
