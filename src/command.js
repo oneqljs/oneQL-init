@@ -15,16 +15,13 @@ module.exports = class command {
     constructor() {
         const cwd = process.cwd()
         this.packageName = boilName // packInfo.name
-        this.cwd = cwd  
+        this.cwd = cwd
         this.argv = yargs.argv
         // 目录
         this.dir = this.argv._[0]
-        // console.log('this. argv ', this.argv)
         this.targetDir = path.resolve(cwd, this.dir)
-
         this.request = urllib.request
         this.httpClient = urllib.create();
-
     }
 
     async curl(url, options) {
@@ -34,15 +31,12 @@ module.exports = class command {
     async init() {
         const flag = await this.createCustromDir()
         if (!flag) return
-
         // todo 选择模板
 
         // 下载模板包
         let tempDir = await this.downloadBoilerplate(this.packageName)
-
         // 第二个参数，只能给相对路径
         await this.copyFiles(tempDir, this.dir)
-
         this.printUsage()
     }
 
@@ -88,8 +82,8 @@ module.exports = class command {
     }
 
     // 获取package包信息
-    async getPackageInfo (pkg) {
-        let packUrl =  `${this.getRegistryByType()}/${pkg}/latest`
+    async getPackageInfo(pkg) {
+        let packUrl = `${this.getRegistryByType()}/${pkg}/latest`
 
         console.log('pack Url ', packUrl)
 
@@ -105,21 +99,25 @@ module.exports = class command {
     async downloadBoilerplate(boilName) {
         const packInfo = await this.getPackageInfo(boilName)
         const tarball = packInfo.dist.tarball
-
         const saveDir = path.join(os.tmpdir(), 'oneql-init-boilerplate')
 
+        const lastOneQLversion = '^' + packInfo.dist.tarball.match(/([0-9\.]*)(.tgz)/)[1]
         // await rimraf(saveDir)
-
         console.log('saveDir', saveDir)
-
-        this.log(`downloading ${tarball}`)
         const res = await this.curl(tarball, { streaming: true, followRedirect: true })
         await compressing.tgz.uncompress(res.res, saveDir)
-
         this.log(`extract to ${saveDir}`)
 
-        return path.join(saveDir, '/package')
+        try {
+            let packageConfig = fs.readFileSync(path.join(saveDir, '/package/package.json'))
+            packageConfig = JSON.parse(packageConfig.toString())
+            packageConfig.dependencies.oneql = lastOneQLversion
+            let c = fs.writeFileSync(path.join(saveDir, '/package/package.json'), JSON.stringify(packageConfig, null, 2))
+        } catch (e) {
+            console.log('e', e)
+        }
 
+        return path.join(saveDir, '/package')
     }
 
     // copy
@@ -130,7 +128,6 @@ module.exports = class command {
     getRegistryByType(_key) {
 
         return 'https://registry.npm.taobao.org';
-
         // switch (key) {
         //   case 'china':
         //     return 'https://registry.npm.taobao.org';
@@ -151,7 +148,5 @@ module.exports = class command {
         //     }
         //   }
         // }
-
-      }
-
+    }
 }
