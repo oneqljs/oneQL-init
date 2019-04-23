@@ -1,6 +1,6 @@
 {
   "name": "oneql-init",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Init oneQL app",
   "main": "src/command.js",
   "bin": {
